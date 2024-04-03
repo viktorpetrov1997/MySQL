@@ -1,4 +1,6 @@
 -- Problem 1 - Mountains and Peaks
+create database mountains_and_peaks
+use mountains_and_peaks
 
 -- Create Mountains table
 CREATE TABLE mountains 

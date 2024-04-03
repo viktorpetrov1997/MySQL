@@ -1,5 +1,4 @@
 create database minions;
-
 use minions;
 
 -- Problem 1 - Create Tables

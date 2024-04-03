@@ -1,4 +1,7 @@
 -- Problem 6 - Create Table People
+create database people_and_users;
+use people_and_users;
+
 CREATE TABLE people 
 (
     id INT PRIMARY KEY AUTO_INCREMENT,
