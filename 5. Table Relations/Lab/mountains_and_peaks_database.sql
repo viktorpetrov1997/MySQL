@@ -1,15 +1,13 @@
--- Problem 1 - Mountains and Peaks
-create database mountains_and_peaks
-use mountains_and_peaks
+create database mountains_and_peaks;
+use mountains_and_peaks;
 
--- Create Mountains table
+-- Problem 1 - Mountains and Peaks
 CREATE TABLE mountains 
 (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255)
 );
 
--- Create Peaks table
 CREATE TABLE peaks 
 (
     id INT PRIMARY KEY AUTO_INCREMENT,

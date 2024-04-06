@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `characters`
   CONSTRAINT `fk_characters_statistics` FOREIGN KEY (`statistics_id`) REFERENCES `statistics` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
+
 /*!40000 ALTER TABLE `characters` DISABLE KEYS */;
 INSERT INTO `characters` (`id`, `name`, `statistics_id`) VALUES
 	(1, 'Barbarian', 1),
@@ -46,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `games`
   KEY `fk_games_game_types` (`game_type_id`),
   CONSTRAINT `fk_games_game_types` FOREIGN KEY (`game_type_id`) REFERENCES `game_types` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=utf8;
+
 
 /*!40000 ALTER TABLE `games` DISABLE KEYS */;
 INSERT INTO `games` (`id`, `name`, `start`, `duration`, `game_type_id`, `is_finished`) VALUES
@@ -1058,6 +1060,7 @@ CREATE TABLE IF NOT EXISTS `item_types`
   UNIQUE KEY `PK_ItemTypes` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
+
 /*!40000 ALTER TABLE `item_types` DISABLE KEYS */;
 INSERT INTO `item_types` (`id`, `name`) VALUES
 	(1, 'Axe'),
@@ -1090,9 +1093,8 @@ INSERT INTO `item_types` (`id`, `name`) VALUES
 	(28, 'Quivers');
 /*!40000 ALTER TABLE `item_types` ENABLE KEYS */;
 
-
-
-CREATE TABLE IF NOT EXISTS `statistics` (
+CREATE TABLE IF NOT EXISTS `statistics` 
+(
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `strength` int(10) NOT NULL,
   `defence` int(10) NOT NULL,
@@ -1102,7 +1104,6 @@ CREATE TABLE IF NOT EXISTS `statistics` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `PK_Statistics` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
-
 
 /*!40000 ALTER TABLE `statistics` DISABLE KEYS */;
 INSERT INTO `statistics` (`id`, `strength`, `defence`, `mind`, `speed`, `luck`) VALUES
@@ -1241,6 +1242,7 @@ CREATE TABLE IF NOT EXISTS `users`
   UNIQUE KEY `PK_Users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
 
+
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `email`, `registration_date`, `is_deleted`, `ip_address`) VALUES
 	(1, 'VGeorgiev', 'Vladimir', 'Georgiev', 'vlado@softuni.bg', '2013-12-16 00:00:00.000000', b'0', '74.212.145.183'),
@@ -1316,8 +1318,9 @@ INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `email`, `reg
 	(71, 'rotoriginally', 'KELLY', 'ROGERS', 'gosyen2000@hotmail.com', '2010-11-11 00:00:00.000000', b'1', '146.141.16.116');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
-CREATE TABLE IF NOT EXISTS `users_games` 
-(
+
+
+CREATE TABLE IF NOT EXISTS `users_games` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `game_id` int(10) NOT NULL,
   `user_id` int(10) NOT NULL,
@@ -1334,6 +1337,7 @@ CREATE TABLE IF NOT EXISTS `users_games`
   CONSTRAINT `fk_user_games_games` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`),
   CONSTRAINT `fk_user_games_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=325 DEFAULT CHARSET=utf8;
+
 
 /*!40000 ALTER TABLE `users_games` DISABLE KEYS */;
 INSERT INTO `users_games` (`id`, `game_id`, `user_id`, `character_id`, `level`, `joined_on`, `cash`) VALUES
@@ -1663,8 +1667,9 @@ INSERT INTO `users_games` (`id`, `game_id`, `user_id`, `character_id`, `level`, 
 	(324, 122, 9, 1, 16, '2013-01-24 00:00:00.000000', 5832.0000);
 /*!40000 ALTER TABLE `users_games` ENABLE KEYS */;
 
-CREATE TABLE IF NOT EXISTS `user_game_items` 
-(
+
+
+CREATE TABLE IF NOT EXISTS `user_game_items` (
   `item_id` int(10) NOT NULL,
   `user_game_id` int(10) NOT NULL,
   PRIMARY KEY (`item_id`,`user_game_id`),
@@ -1673,6 +1678,7 @@ CREATE TABLE IF NOT EXISTS `user_game_items`
   CONSTRAINT `fk_user_game_Items_items` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
   CONSTRAINT `fk_user_game_Items_user_games` FOREIGN KEY (`user_game_id`) REFERENCES `users_games` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 /*!40000 ALTER TABLE `user_game_items` DISABLE KEYS */;
 INSERT INTO `user_game_items` (`item_id`, `user_game_id`) VALUES
@@ -4087,35 +4093,3 @@ INSERT INTO `user_game_items` (`item_id`, `user_game_id`) VALUES
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
--- Problem 12 - Games From 2011 and 2012 Year
-SELECT `name`, date_format(`start`, '%Y-%m-%d') AS `start` FROM `games`
-WHERE year(`start`) >= 2011 AND year(`start`) <= 2012  
-ORDER BY `start`, `name`
-LIMIT 50;
-
--- Problem 13 - User Email Providers
-SELECT `user_name`, substring(`email`, locate('@', email) + 1) AS 'Email Provider' FROM `users` 
-ORDER BY `Email Provider`, `user_name`;
-
--- Problem 14 - Get Users with IP Address Like Pattern
-SELECT `user_name`, `ip_address` FROM `users`
-WHERE `ip_address` LIKE '___.1%.%.___'
-ORDER BY `user_name`;
-
--- Problem 15 - Show All Games with Duration
-SELECT `name` as 'game',
-CASE
-WHEN hour(`start`) < 12 THEN 'Morning'
-WHEN hour(`start`) < 18 THEN 'Afternoon'
-ELSE 'Evening'
-END 
-AS 'Part of the Day',
-CASE
-WHEN `duration` <= 3 THEN 'Extra Short'
-WHEN `duration` <= 6 THEN 'Short'
-WHEN `duration` <= 10 THEN 'Long'
-ELSE 'Extra Long'
-END 
-AS 'Duration'
-FROM `games`;

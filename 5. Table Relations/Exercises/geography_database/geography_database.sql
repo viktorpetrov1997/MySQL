@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS `continents`
   UNIQUE KEY `PK_Continents` (`continent_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 /*!40000 ALTER TABLE `continents` DISABLE KEYS */;
 INSERT INTO `continents` (`continent_code`, `continent_name`) VALUES
 	('AF', 'Africa'),
@@ -298,7 +297,7 @@ INSERT INTO `countries` (`country_code`, `iso_code`, `country_name`, `currency_c
 	('ZW', 'ZWE', 'Zimbabwe', 'ZWD', 'AF', 11651858, 390580, 'Harare');
 /*!40000 ALTER TABLE `countries` ENABLE KEYS */;
 
-CREATE TABLE IF NOT EXISTS `countries_rivers` 
+CREATE TABLE IF NOT EXISTS `countries_rivers`
 (
   `river_id` int(10) NOT NULL,
   `country_code` char(2) NOT NULL,
@@ -307,7 +306,6 @@ CREATE TABLE IF NOT EXISTS `countries_rivers`
   CONSTRAINT `fk_countries_rivers_countries` FOREIGN KEY (`country_code`) REFERENCES `countries` (`country_code`),
   CONSTRAINT `fk_countries_rivers_rivers` FOREIGN KEY (`river_id`) REFERENCES `rivers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 /*!40000 ALTER TABLE `countries_rivers` DISABLE KEYS */;
 INSERT INTO `countries_rivers` (`river_id`, `country_code`) VALUES
@@ -424,7 +422,6 @@ CREATE TABLE IF NOT EXISTS `currencies`
   PRIMARY KEY (`currency_code`),
   UNIQUE KEY `PK_Currencies` (`currency_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 /*!40000 ALTER TABLE `currencies` DISABLE KEYS */;
 INSERT INTO `currencies` (`currency_code`, `description`) VALUES
@@ -601,7 +598,6 @@ CREATE TABLE IF NOT EXISTS `mountains`
   UNIQUE KEY `PK_Mountains` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
-
 /*!40000 ALTER TABLE `mountains` DISABLE KEYS */;
 INSERT INTO `mountains` (`id`, `mountain_range`) VALUES
 	(1, 'Alaska Range'),
@@ -632,8 +628,6 @@ INSERT INTO `mountains` (`id`, `mountain_range`) VALUES
 	(26, 'Monte Rosa');
 /*!40000 ALTER TABLE `mountains` ENABLE KEYS */;
 
-
-
 CREATE TABLE IF NOT EXISTS `mountains_countries` 
 (
   `mountain_id` int(10) NOT NULL,
@@ -644,7 +638,6 @@ CREATE TABLE IF NOT EXISTS `mountains_countries`
   CONSTRAINT `fk_mountains_countries_countries` FOREIGN KEY (`mountain_id`) REFERENCES `mountains` (`id`),
   CONSTRAINT `fk_mountains_countries_mountains` FOREIGN KEY (`country_code`) REFERENCES `countries` (`country_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 /*!40000 ALTER TABLE `mountains_countries` DISABLE KEYS */;
 INSERT INTO `mountains_countries` (`mountain_id`, `country_code`) VALUES
@@ -679,8 +672,6 @@ INSERT INTO `mountains_countries` (`mountain_id`, `country_code`) VALUES
 	(1, 'US');
 /*!40000 ALTER TABLE `mountains_countries` ENABLE KEYS */;
 
-
-
 CREATE TABLE IF NOT EXISTS `peaks` 
 (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -692,7 +683,6 @@ CREATE TABLE IF NOT EXISTS `peaks`
   KEY `fk_peaks_mountains` (`mountain_id`),
   CONSTRAINT `fk_peaks_mountains` FOREIGN KEY (`mountain_id`) REFERENCES `mountains` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
-
 
 /*!40000 ALTER TABLE `peaks` DISABLE KEYS */;
 INSERT INTO `peaks` (`id`, `peak_name`, `elevation`, `mountain_id`) VALUES
@@ -746,9 +736,7 @@ INSERT INTO `peaks` (`id`, `peak_name`, `elevation`, `mountain_id`) VALUES
 	(109, 'Kom', 2016, 4);
 /*!40000 ALTER TABLE `peaks` ENABLE KEYS */;
 
-
-
-CREATE TABLE IF NOT EXISTS `rivers`
+CREATE TABLE IF NOT EXISTS `rivers` 
 (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `river_name` varchar(50) NOT NULL,
@@ -759,7 +747,6 @@ CREATE TABLE IF NOT EXISTS `rivers`
   PRIMARY KEY (`id`),
   UNIQUE KEY `PK_Rivers` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
-
 
 /*!40000 ALTER TABLE `rivers` DISABLE KEYS */;
 INSERT INTO `rivers` (`id`, `river_name`, `length`, `drainage_area`, `average_discharge`, `outflow`) VALUES
@@ -797,20 +784,3 @@ INSERT INTO `rivers` (`id`, `river_name`, `length`, `drainage_area`, `average_di
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
--- Problem 21 - All Mountain Peaks
-select peak_name from peaks
-order by peak_name;
-
--- Problem 22 - Biggest Countries by Populations
-select country_name, population from countries
-where continent_code = "EU"
-order by population desc, country_name
-limit 30;
-
--- Problem 23 - Countries and Currency (Euro / Not Euro)
-SELECT country_name, country_code,
-CASE WHEN currency_code = 'EUR' THEN 'Euro' ELSE 'Not Euro' END AS currency
-FROM countries
-order by country_name;
-

@@ -366,7 +366,6 @@ CREATE TABLE IF NOT EXISTS `employees`
   CONSTRAINT `fk_employees_employees` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`employee_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=294 DEFAULT CHARSET=utf8;
 
-
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
 INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `middle_name`, `job_title`, `department_id`, `manager_id`, `hire_date`, `salary`, `address_id`) VALUES
 	(1, 'Guy', 'Gilbert', 'R', 'Production Technician', 7, 16, '1998-07-31 00:00:00.000000', 12500.0000, 166),
@@ -1533,6 +1532,7 @@ CREATE TABLE IF NOT EXISTS `projects`
   UNIQUE KEY `PK_Projects` (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
 
+
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
 INSERT INTO `projects` (`project_id`, `name`, `description`, `start_date`, `end_date`) VALUES
 	(1, 'Classic Vest', 'Research, design and development of Classic Vest. Light-weight, wind-resistant, packs to fit into a pocket.', '2003-06-01 00:00:00.000000', NULL),
@@ -1624,6 +1624,7 @@ CREATE TABLE IF NOT EXISTS `towns`
   UNIQUE KEY `PK_Towns` (`town_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
+
 /*!40000 ALTER TABLE `towns` DISABLE KEYS */;
 INSERT INTO `towns` (`town_id`, `name`) VALUES
 	(1, 'Redmond'),
@@ -1662,90 +1663,3 @@ INSERT INTO `towns` (`town_id`, `name`) VALUES
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
--- Problem 1 - Employees with Salary Above 35000
-DELIMITER $$
-CREATE PROCEDURE usp_get_employees_salary_above_35000()
-BEGIN
-	select first_name, last_name from employees
-    where salary > 35000
-    order by first_name, last_name, employee_id;
-END$$
-
-call usp_get_employees_salary_above_35000();
-
--- Problem 2 - Employees with Salary Above Number
-DELIMITER $$
-CREATE PROCEDURE usp_get_employees_salary_above(desired_salary DECIMAL(19,4))
-BEGIN
-	select first_name, last_name from employees
-    where salary >= desired_salary
-    order by first_name, last_name, employee_id;
-END$$
-
-call usp_get_employees_salary_above(45000);
-
--- Problem 3 - Town Names Starting With
-DELIMITER $$
-CREATE PROCEDURE usp_get_towns_starting_with(town_substring VARCHAR(50))
-BEGIN
-  SELECT `name` 
-  FROM `towns`
-  WHERE `name` like CONCAT(town_substring,'%')
-  order by `name`;
-END$$
-
-call usp_get_towns_starting_with("b");
-
--- Problem 4 - Employees from Town
-DELIMITER $$
-CREATE PROCEDURE usp_get_employees_from_town(searched_town VARCHAR(50))
-BEGIN
-  SELECT `first_name`, `last_name`
-  FROM `employees` AS e
-  JOIN `addresses` AS a USING (address_id)
-  JOIN `towns` AS t USING (town_id)
-  WHERE t.`name` = `searched_town`
-  ORDER BY `first_name`,`last_name`;
-END$$
-
-call usp_get_employees_from_town("Sofia");
-
--- Problem 5 - Salary Level Function
-DELIMITER $$
-CREATE FUNCTION ufn_get_salary_level(salary DECIMAL(19, 4))
-RETURNS VARCHAR(8)
-DETERMINISTIC
-BEGIN
-    DECLARE salary_level VARCHAR(8);
-    IF salary < 30000 THEN SET salary_level := 'Low';
-    ELSEIF salary <= 50000 THEN SET salary_level := 'Average';
-    ELSE SET salary_level := 'High';
-    END IF;
-    RETURN salary_level;
-END$$
-
-select ufn_get_salary_level(10000);
-
--- Problem 6 - Employees by Salary Level
-DELIMITER $$
-CREATE PROCEDURE usp_get_employees_by_salary_level(salary_level VARCHAR(8)) 
-BEGIN
-    SELECT first_name, last_name
-    FROM employees
-    WHERE ufn_get_salary_level(salary) LIKE salary_level
-    ORDER BY first_name DESC, last_name DESC;
-END$$
-
-call usp_get_employees_by_salary_level("High");
-
--- Problem 7 - Define Function
-DELIMITER $$
-CREATE FUNCTION ufn_is_word_comprised(set_of_letters VARCHAR(50), word VARCHAR(50))
-RETURNS INT
-DETERMINISTIC
-BEGIN
-    RETURN word REGEXP (CONCAT('^[', set_of_letters, ']+$'));
-END$$
-
-select ufn_is_word_comprised("oistmiahf", "Sofia");

@@ -17,62 +17,6 @@ CREATE TABLE IF NOT EXISTS `addresses`
   CONSTRAINT `fk_addresses_towns` FOREIGN KEY (`town_id`) REFERENCES `towns` (`town_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=292 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `departments` 
-(
-  `department_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `manager_id` int(10) NOT NULL,
-  PRIMARY KEY (`department_id`),
-  UNIQUE KEY `PK_Departments` (`department_id`),
-  KEY `fk_departments_employees` (`manager_id`),
-  CONSTRAINT `fk_departments_employees` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`employee_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `employees` 
-(
-  `employee_id` int(10) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(50) NOT NULL,
-  `last_name` varchar(50) NOT NULL,
-  `middle_name` varchar(50) DEFAULT NULL,
-  `job_title` varchar(50) NOT NULL,
-  `department_id` int(10) NOT NULL,
-  `manager_id` int(10) DEFAULT NULL,
-  `hire_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  `salary` decimal(19,4) NOT NULL,
-  `address_id` int(10) DEFAULT NULL,
-  PRIMARY KEY (`employee_id`),
-  UNIQUE KEY `PK_Employees` (`employee_id`),
-  KEY `CL_FirstName` (`first_name`),
-  KEY `fk_employees_departments` (`department_id`),
-  KEY `fk_employees_employees` (`manager_id`),
-  KEY `fk_employees_addresses` (`address_id`),
-  CONSTRAINT `fk_employees_addresses` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`address_id`),
-  CONSTRAINT `fk_employees_departments` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`),
-  CONSTRAINT `fk_employees_employees` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`employee_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=294 DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `employees_projects` 
-(
-  `employee_id` int(10) NOT NULL,
-  `project_id` int(10) NOT NULL,
-  PRIMARY KEY (`employee_id`,`project_id`),
-  UNIQUE KEY `PK_EmployeesProjects` (`employee_id`,`project_id`),
-  KEY `fk_employees_projects_projects` (`project_id`),
-  CONSTRAINT `fk_employees_projects_employees` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`),
-  CONSTRAINT `fk_employees_projects_projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `projects` 
-(
-  `project_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `description` text,
-  `start_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  `end_date` timestamp(6) NULL DEFAULT NULL,
-  PRIMARY KEY (`project_id`),
-  UNIQUE KEY `PK_Projects` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
-
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
 INSERT INTO `addresses` (`address_id`, `address_text`, `town_id`) VALUES
 	(1, '108 Lakeside Court', 5),
@@ -368,6 +312,17 @@ INSERT INTO `addresses` (`address_id`, `address_text`, `town_id`) VALUES
 	(291, '163 Nishava Str, ent A, apt. 1', 32);
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 
+CREATE TABLE IF NOT EXISTS `departments`
+(
+  `department_id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `manager_id` int(10) NOT NULL,
+  PRIMARY KEY (`department_id`),
+  UNIQUE KEY `PK_Departments` (`department_id`),
+  KEY `fk_departments_employees` (`manager_id`),
+  CONSTRAINT `fk_departments_employees` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`employee_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
 INSERT INTO `departments` (`department_id`, `name`, `manager_id`) VALUES
 	(1, 'Engineering', 12),
@@ -387,6 +342,29 @@ INSERT INTO `departments` (`department_id`, `name`, `manager_id`) VALUES
 	(15, 'Shipping and Receiving', 85),
 	(16, 'Executive', 109);
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
+
+CREATE TABLE IF NOT EXISTS `employees` 
+(
+  `employee_id` int(10) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `middle_name` varchar(50) DEFAULT NULL,
+  `job_title` varchar(50) NOT NULL,
+  `department_id` int(10) NOT NULL,
+  `manager_id` int(10) DEFAULT NULL,
+  `hire_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `salary` decimal(19,4) NOT NULL,
+  `address_id` int(10) DEFAULT NULL,
+  PRIMARY KEY (`employee_id`),
+  UNIQUE KEY `PK_Employees` (`employee_id`),
+  KEY `CL_FirstName` (`first_name`),
+  KEY `fk_employees_departments` (`department_id`),
+  KEY `fk_employees_employees` (`manager_id`),
+  KEY `fk_employees_addresses` (`address_id`),
+  CONSTRAINT `fk_employees_addresses` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`address_id`),
+  CONSTRAINT `fk_employees_departments` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`),
+  CONSTRAINT `fk_employees_employees` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`employee_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=294 DEFAULT CHARSET=utf8;
 
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
 INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `middle_name`, `job_title`, `department_id`, `manager_id`, `hire_date`, `salary`, `address_id`) VALUES
@@ -684,6 +662,17 @@ INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `middle_name`
 	(292, 'Martin', 'Kulov', NULL, 'Independent .NET Consultant', 6, NULL, '2005-03-01 00:00:00.000000', 48000.0000, 291),
 	(293, 'George', 'Denchev', NULL, 'Independent Java Consultant', 6, NULL, '2005-03-01 00:00:00.000000', 48000.0000, 291);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
+
+CREATE TABLE IF NOT EXISTS `employees_projects` 
+(
+  `employee_id` int(10) NOT NULL,
+  `project_id` int(10) NOT NULL,
+  PRIMARY KEY (`employee_id`,`project_id`),
+  UNIQUE KEY `PK_EmployeesProjects` (`employee_id`,`project_id`),
+  KEY `fk_employees_projects_projects` (`project_id`),
+  CONSTRAINT `fk_employees_projects_employees` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`),
+  CONSTRAINT `fk_employees_projects_projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40000 ALTER TABLE `employees_projects` DISABLE KEYS */;
 INSERT INTO `employees_projects` (`employee_id`, `project_id`) VALUES
@@ -1532,6 +1521,17 @@ INSERT INTO `employees_projects` (`employee_id`, `project_id`) VALUES
 	(245, 127);
 /*!40000 ALTER TABLE `employees_projects` ENABLE KEYS */;
 
+CREATE TABLE IF NOT EXISTS `projects` 
+(
+  `project_id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `description` text,
+  `start_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `end_date` timestamp(6) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_id`),
+  UNIQUE KEY `PK_Projects` (`project_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
 INSERT INTO `projects` (`project_id`, `name`, `description`, `start_date`, `end_date`) VALUES
 	(1, 'Classic Vest', 'Research, design and development of Classic Vest. Light-weight, wind-resistant, packs to fit into a pocket.', '2003-06-01 00:00:00.000000', NULL),
@@ -1661,64 +1661,3 @@ INSERT INTO `towns` (`town_id`, `name`) VALUES
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
--- Problem 12 - Employees Minimum Salaries
-SELECT `department_id`, min(`salary`) AS 'minimum_salary'
-FROM `employees`
-WHERE `hire_date` > '2000-01-01'
-GROUP BY `department_id`
-HAVING `department_id` IN (2, 5, 7)
-ORDER BY `department_id`;
-
--- Problem 13 - Employees Average Salaries
-CREATE TABLE `salary_more_than` AS
-SELECT *
-FROM `employees`
-WHERE `salary` > 30000;
- 
-DELETE 
-FROM `salary_more_than`
-WHERE `manager_id` = 42;
- 
-UPDATE `salary_more_than`
-SET `salary` = `salary` + 5000
-WHERE `department_id` = 1;
- 
-SELECT `department_id`, avg(`salary`) AS `avg_salary`
-FROM `salary_more_than`
-GROUP BY `department_id`
-ORDER BY `department_id`;
-
--- Problem 14 - Employees Maximum Salaries
-select department_id, max(salary) as max_salary from employees
-group by department_id
-having max_salary not between 30000 and 70000
-order by department_id;
-
--- Problem 15 - Employees Count Salaries
-select count(salary) from employees
-where manager_id is null;
-
--- Problem 16 - 3rd Highest Salary
-SELECT DISTINCT `department_id`,
-        (
-        SELECT  DISTINCT `salary`
-        FROM    `employees` e
-        WHERE   e.`department_id` = `employees`.`department_id`
-        ORDER BY `salary` DESC
-        LIMIT 1 OFFSET 2
-        ) AS `third_highest_salary`
-FROM    `employees`
-HAVING `third_highest_salary` IS NOT NULL
-ORDER BY `department_id`;
-
--- Problem 17 - Salary Challenge
-select first_name, last_name, department_id from employees f
-where salary > (select avg(salary) from employees e where e.department_id = f.department_id)
-order by department_id, employee_id
-limit 10;
-
--- Problem 18 - Departments Total Salaries
-select department_id, sum(salary) from employees
-group by department_id
-order by department_id;

@@ -1,4 +1,5 @@
 CREATE DATABASE `gamebar`;
+use gamebar;
 
 -- We can use 'USE `gamebar`' so that every SQL statement that is executed references the gamebar database
 -- instead of writing `gamebar` explicitly

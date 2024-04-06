@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `addresses`
   CONSTRAINT `fk_addresses_towns` FOREIGN KEY (`town_id`) REFERENCES `towns` (`town_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=292 DEFAULT CHARSET=utf8;
 
+
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
 INSERT INTO `addresses` (`address_id`, `address_text`, `town_id`) VALUES
 	(1, '108 Lakeside Court', 5),
@@ -366,6 +367,7 @@ CREATE TABLE IF NOT EXISTS `employees`
   CONSTRAINT `fk_employees_employees` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`employee_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=294 DEFAULT CHARSET=utf8;
 
+
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
 INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `middle_name`, `job_title`, `department_id`, `manager_id`, `hire_date`, `salary`, `address_id`) VALUES
 	(1, 'Guy', 'Gilbert', 'R', 'Production Technician', 7, 16, '1998-07-31 00:00:00.000000', 12500.0000, 166),
@@ -673,6 +675,7 @@ CREATE TABLE IF NOT EXISTS `employees_projects`
   CONSTRAINT `fk_employees_projects_employees` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`),
   CONSTRAINT `fk_employees_projects_projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 /*!40000 ALTER TABLE `employees_projects` DISABLE KEYS */;
 INSERT INTO `employees_projects` (`employee_id`, `project_id`) VALUES
@@ -1521,6 +1524,8 @@ INSERT INTO `employees_projects` (`employee_id`, `project_id`) VALUES
 	(245, 127);
 /*!40000 ALTER TABLE `employees_projects` ENABLE KEYS */;
 
+
+
 CREATE TABLE IF NOT EXISTS `projects` 
 (
   `project_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -1616,6 +1621,8 @@ INSERT INTO `projects` (`project_id`, `name`, `description`, `start_date`, `end_
 	(127, 'Rear Derailleur', 'Research, design and development of Rear Derailleur. Wide-link design.', '2003-06-01 00:00:00.000000', NULL);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 
+
+
 CREATE TABLE IF NOT EXISTS `towns` 
 (
   `town_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -1663,49 +1670,3 @@ INSERT INTO `towns` (`town_id`, `name`) VALUES
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
--- Problem 1 - Find Names of All Employees by First Name
-select first_name, last_name from employees
-where first_name like "Sa%"
-order by employee_id;
-
--- Problem 2 - Find Names of All Employees by Last Name
-SELECT first_name, last_name FROM employees
-WHERE last_name LIKE '%ei%'
-ORDER BY employee_id;
-
--- Problem 3 - Find First Names of All Employess
-SELECT first_name FROM employees
-WHERE department_id IN (3, 10) AND YEAR(hire_date) BETWEEN 1995 AND 2005
-ORDER BY employee_id;
-
--- Problem 4 - Find All Employees Except Engineers
-SELECT first_name, last_name FROM employees
-WHERE job_title NOT LIKE '%engineer%'
-ORDER BY employee_id;
-
--- Problem 5 - Find Towns with Name Length
-SELECT name FROM towns
-WHERE LENGTH(name) BETWEEN 5 AND 6
-ORDER BY name;
-
--- Problem 6 - Find Towns Starting With
-SELECT town_id, name FROM towns
-WHERE LOWER(SUBSTR(name, 1, 1)) IN ('m', 'k', 'b', 'e')
-ORDER BY name;
-
--- Problem 7 - Find Towns Not Starting With
-SELECT town_id, name FROM towns
-WHERE LOWER(SUBSTR(name, 1, 1)) NOT IN ('r', 'b', 'd')
-ORDER BY name;
-
--- Problem 8 - Create View Employees Hired After
-create view v_employees_hired_after_2000 as
-select first_name, last_name from employees
-where year(hire_date) > 2000;
-
-select * from v_employees_hired_after_2000;
-
--- Problem 9 - Length of Last Name
-select first_name, last_name from employees
-where length(last_name) = 5;
