@@ -1664,7 +1664,6 @@ INSERT INTO `towns` (`town_id`, `name`) VALUES
 
 -- Problem 1 - Count Employees by Town
 DELIMITER $$
-
 CREATE FUNCTION ufn_count_employees_by_town(town_name varchar(50))
 RETURNS INT 
 DETERMINISTIC
@@ -1681,7 +1680,6 @@ select ufn_count_employees_by_town("Sofia");
 
 -- Problem 2 - Employees Promotion
 DELIMITER $$
-
 CREATE PROCEDURE usp_raise_salaries(department_name varchar(50))
 BEGIN
 	UPDATE employees AS e 
@@ -1695,7 +1693,6 @@ call usp_raise_salaries("Finance");
 
 -- Problem 3 - Employees Promotion By ID
 DELIMITER $$
-
 CREATE PROCEDURE usp_raise_salary_by_id(id int)
 BEGIN
 	START TRANSACTION;
@@ -1722,7 +1719,6 @@ CREATE TABLE deleted_employees
 );
 
 DELIMITER $$
-
 CREATE TRIGGER tr_deleted_employees
 AFTER DELETE
 ON employees
