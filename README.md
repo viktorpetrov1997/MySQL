@@ -14,12 +14,13 @@ Databases are the standard way of using dynamic information in modern applicatio
 * Exam Preparation
 
 ## Acquired skills
-* Working with linear structures
-* Working with classes and objects
-* Application of object-oriented programming
-* Information extraction and manipulation of the DOM tree
-* Working with functions and JSON formats
-* Application of functional programming
+* Working with databases
+* DB relation management
+* Using procedures and functions
+* Transaction management
+* Using the ACID model
+* Creating basic Back-End architectures
 
 ## Certificate :heavy_check_mark:
-![JS Advanced - Certificate](https://github.com/viktorpetrov1997/JS-Advanced/assets/126717931/f30e3bbe-b683-4ad6-bbf0-767559d4139e)
+![MySQL - Certificate](https://github.com/viktorpetrov1997/MySQL/assets/126717931/95122f80-4ee8-4fce-b779-5e2684dad79d)
+
